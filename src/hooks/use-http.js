@@ -10,26 +10,20 @@ const useHttp = (requestConfig, applyData) => {
         try {
             const response = await fetch(
                 requestConfig.url, {
-                method: requestConfig.method,
-                headers: requestConfig.headers,
-                body: JSON.stringify(requestConfig.body)
-            }
-            );
-
+                method: requestConfig.method ? requestConfig.method : "GET",
+                headers: requestConfig.headers ? requestConfig.headers : {},
+                body: requestConfig.body ? JSON.stringify(requestConfig.body) : null
+            });
             if (!response.ok) {
                 throw new Error('Request failed!');
             }
-
             const data = await response.json();
             applyData(data);
-
-
         } catch (err) {
             setError(err.message || 'Something went wrong!');
         }
         setIsLoading(false);
     };
-
     return {
         isLoading: isLoading,
         eeror: error,
